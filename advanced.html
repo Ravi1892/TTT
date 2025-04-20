@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Tic Tac Toe - Advanced Mode</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <meta
+      name="description"
+      content="Advanced mode of Tic Tac Toe with special features"
+    />
+    <meta name="theme-color" content="#764ba2" />
+    <style>
+      .home-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #764ba2;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        font-size: 18px;
+        z-index: 10; /* Ensure button appears above other elements */
+      }
+
+      .home-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        background: white;
+      }
+
+      .advanced-label {
+        background: linear-gradient(to right, #3498db, #2980b9);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+      }
+
+      .fade-out {
+        animation: fadeOut 0.5s ease;
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+      }
+
+      /* Popup styles */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .popup-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .popup-content {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        max-width: 90%;
+        width: 450px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      }
+
+      .popup-overlay.show .popup-content {
+        transform: scale(1);
+      }
+
+      .popup-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #4a4a4a;
+        margin-bottom: 15px;
+      }
+
+      .popup-message {
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #555;
+      }
+
+      .popup-button {
+        background: linear-gradient(to right, #3498db, #2980b9);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        padding: 10px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .popup-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+      }
+
+      @media screen and (max-width: 480px) {
+        .home-button {
+          top: 10px;
+          left: 10px;
+          width: 35px;
+          height: 35px;
+          font-size: 16px;
+        }
+
+        .advanced-label {
+          font-size: 0.7rem;
+          padding: 4px 12px;
+          margin-bottom: 15px;
+        }
+
+        .popup-content {
+          padding: 20px;
+        }
+
+        .popup-title {
+          font-size: 1.3rem;
+          margin-bottom: 12px;
+        }
+
+        .popup-message {
+          font-size: 0.95rem;
+          margin-bottom: 15px;
+        }
+      }
+
+      @media screen and (max-height: 500px) and (orientation: landscape) {
+        .home-button {
+          top: 5px;
+          left: 5px;
+          width: 30px;
+          height: 30px;
+          font-size: 14px;
+        }
+
+        .advanced-label {
+          margin-bottom: 5px;
+          padding: 3px 10px;
+          font-size: 0.6rem;
+        }
+
+        .popup-content {
+          padding: 15px;
+          max-width: 80%;
+        }
+
+        .popup-title {
+          font-size: 1.1rem;
+          margin-bottom: 8px;
+        }
+
+        .popup-message {
+          font-size: 0.9rem;
+          margin-bottom: 12px;
+        }
+
+        .popup-button {
+          padding: 8px 20px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup-overlay" id="rules-popup">
+      <div class="popup-content">
+        <div class="popup-title">Advanced Mode Rules</div>
+        <div class="popup-message">
+          Each player can only have 3 marks on the board at a time. When you
+          place a 4th mark, your oldest mark will be removed!
+        </div>
+        <button class="popup-button" id="start-game-btn">
+          Got it, let's play!
+        </button>
+      </div>
+    </div>
+
+    <a href="index.html" class="home-button" title="Back to Home">
+      <i class="fas fa-home"></i>
+    </a>
+    <div class="container">
+      <h1>Tic Tac Toe</h1>
+      <div class="advanced-label">Advanced Mode</div>
+
+      <div class="score-board">
+        <div class="score player-x">
+          <div class="score-title">Player X</div>
+          <div class="score-value" id="score-x">0</div>
+        </div>
+        <div class="score player-o">
+          <div class="score-title">Player O</div>
+          <div class="score-value" id="score-o">0</div>
+        </div>
+      </div>
+
+      <div class="status">Player X's turn</div>
+      <div class="board">
+        <div class="cell" data-cell-index="0"></div>
+        <div class="cell" data-cell-index="1"></div>
+        <div class="cell" data-cell-index="2"></div>
+        <div class="cell" data-cell-index="3"></div>
+        <div class="cell" data-cell-index="4"></div>
+        <div class="cell" data-cell-index="5"></div>
+        <div class="cell" data-cell-index="6"></div>
+        <div class="cell" data-cell-index="7"></div>
+        <div class="cell" data-cell-index="8"></div>
+      </div>
+      <button class="restart"><i class="fas fa-redo"></i> New Game</button>
+    </div>
+    <script src="advanced.js"></script>
+    <script>
+      // Show the rules popup when the page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        // Show popup with slight delay for better UX
+        setTimeout(function () {
+          document.getElementById("rules-popup").classList.add("show");
+        }, 500);
+
+        // Close popup when the button is clicked
+        document
+          .getElementById("start-game-btn")
+          .addEventListener("click", function () {
+            document.getElementById("rules-popup").classList.remove("show");
+          });
+
+        // Store in localStorage that the user has seen the popup
+        // This could be used later if you want to only show it once ever
+        localStorage.setItem("advancedRulesShown", "true");
+      });
+    </script>
+  </body>
+</html>
