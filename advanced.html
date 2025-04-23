@@ -64,7 +64,7 @@
       }
 
       .fade-out {
-        animation: fadeOut 0.5s ease;
+        animation: fadeOut 0.25s ease;
       }
 
       @keyframes fadeOut {
@@ -74,7 +74,7 @@
         }
         50% {
           opacity: 0.5;
-          transform: scale(1.2);
+          transform: scale(1.1);
         }
         100% {
           opacity: 0;
@@ -96,7 +96,7 @@
         z-index: 100;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
       }
 
       .popup-overlay.show {
@@ -113,7 +113,7 @@
         text-align: center;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         transform: scale(0.8);
-        transition: transform 0.3s ease;
+        transition: transform 0.2s ease;
       }
 
       .popup-overlay.show .popup-content {
@@ -268,10 +268,10 @@
     <script>
       // Show the rules popup when the page loads
       document.addEventListener("DOMContentLoaded", function () {
-        // Show popup with slight delay for better UX
+        // Show popup with slight delay for better UX - reduced from 500ms to 100ms
         setTimeout(function () {
           document.getElementById("rules-popup").classList.add("show");
-        }, 500);
+        }, 100);
 
         // Close popup when the button is clicked
         document

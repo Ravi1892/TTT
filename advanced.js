@@ -102,11 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
     clickSound.currentTime = 0;
     clickSound.play().catch((e) => console.log("Audio play error:", e));
 
-    // Add animation
+    // Add animation - reduced from 150ms to 80ms
     clickedCell.style.transform = "scale(0.95)";
     setTimeout(() => {
       clickedCell.style.transform = "";
-    }, 150);
+    }, 80);
 
     // Handle the cell being played - this will update the game state and handle mark removal
     handleCellPlayed(clickedCell, clickedCellIndex);
@@ -120,8 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update warning state AFTER player change to highlight current player's oldest mark
       updateWarningState();
     }
-
-    // No setTimeout delay here anymore - makes player transition immediate
   }
 
   function handleCellPlayed(clickedCell, clickedCellIndex) {
@@ -176,11 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
     gameState[cellIndex] = "";
 
     // Wait for animation to complete before clearing the cell visually
+    // Reduced from 500ms to 250ms
     setTimeout(() => {
       cell.textContent = "";
       cell.classList.remove(playerClass);
       cell.classList.remove("fade-out");
-    }, 500);
+    }, 250);
   }
 
   function handleResultValidation() {
@@ -235,11 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
       drawSound.play().catch((e) => console.log("Audio play error:", e));
 
       statusDisplay.textContent = "Board full, keep playing!";
+      // Reduced from 2000ms to 1000ms
       setTimeout(() => {
         if (gameActive) {
           statusDisplay.textContent = currentPlayerTurn();
         }
-      }, 2000);
+      }, 1000);
     }
 
     return false;
@@ -259,9 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const scoreElement = currentPlayer === "X" ? scoreX : scoreO;
       scoreElement.classList.add("winner-animation");
 
+      // Reduced from 1000ms to 500ms
       setTimeout(() => {
         scoreElement.classList.remove("winner-animation");
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -288,11 +289,11 @@ document.addEventListener("DOMContentLoaded", () => {
     clickSound.currentTime = 0;
     clickSound.play().catch((e) => console.log("Audio play error:", e));
 
-    // Button animation
+    // Button animation - reduced from 150ms to 80ms
     restartButton.style.transform = "scale(0.95)";
     setTimeout(() => {
       restartButton.style.transform = "";
-    }, 150);
+    }, 80);
 
     // Initialize warning for player X (first player)
     updateWarningState();
