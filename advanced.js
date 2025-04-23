@@ -111,19 +111,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle the cell being played - this will update the game state and handle mark removal
     handleCellPlayed(clickedCell, clickedCellIndex);
 
-    // After all marks have been placed and any old marks removed, check for a win
-    // This ensures we only check for win conditions with the current state of the board
-    setTimeout(() => {
-      let gameWon = handleResultValidation();
+    // Check for a win immediately after placing the mark
+    let gameWon = handleResultValidation();
 
-      // Only change player and update warning if game is not won
-      if (!gameWon && gameActive) {
-        changePlayer();
+    // Only change player and update warning if game is not won
+    if (!gameWon && gameActive) {
+      changePlayer();
+      // Update warning state AFTER player change to highlight current player's oldest mark
+      updateWarningState();
+    }
 
-        // Update warning state AFTER player change to highlight current player's oldest mark
-        updateWarningState();
-      }
-    }, 600); // Wait for mark removal animation to complete (500ms) plus a small buffer
+    // No setTimeout delay here anymore - makes player transition immediate
   }
 
   function handleCellPlayed(clickedCell, clickedCellIndex) {
