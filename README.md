@@ -6,7 +6,7 @@ A modern, responsive implementation of the classic Tic Tac Toe game with standar
 
 ## 🎮 Play Now
 
-[Play the game online](https://your-username.github.io/tic-tac-toe/) or download and run locally.
+[Play the game online](https://ravi1892.io/tic-tac-toe/) or download and run locally.
 
 ## ✨ Features
 
@@ -70,22 +70,3 @@ No build process or additional dependencies required!
 - Customizable player tokens and themes
 - Game statistics and history
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 🙏 Acknowledgements
-
-- Sound effects from [Mixkit](https://mixkit.co/)
-- Icons from [Font Awesome](https://fontawesome.com/)
-- Fonts from [Google Fonts](https://fonts.google.com/)
