@@ -6,7 +6,7 @@ A modern, responsive implementation of the classic Tic Tac Toe game with standar
 
 ## 🎮 Play Now
 
-[Play the game online](https://ravi1892.io/TTT/) or download and run locally.
+[Play the game online](https://ravi1892.github.io/TTT/) or download and run locally.
 
 ## ✨ Features
 
