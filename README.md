@@ -2,11 +2,11 @@
 
 A modern, responsive implementation of the classic Tic Tac Toe game with standard and advanced gameplay modes.
 
-![Tic Tac Toe Game](https://github.com/your-username/tic-tac-toe/raw/main/screenshot.png)
+![Tic Tac Toe Game](https://github.com/ravi1892/TTT/raw/main/screenshot.png)
 
 ## 🎮 Play Now
 
-[Play the game online](https://ravi1892.io/tic-tac-toe/) or download and run locally.
+[Play the game online](https://ravi1892.io/TTT/) or download and run locally.
 
 ## ✨ Features
 
@@ -52,7 +52,7 @@ A modern, responsive implementation of the classic Tic Tac Toe game with standar
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/tic-tac-toe.git
+   git clone https://github.com/ravi1892/TTT.git
    ```
 
 2. Open any of the HTML files in your browser:
