@@ -2,7 +2,7 @@
 
 A modern, responsive implementation of the classic Tic Tac Toe game with standard and advanced gameplay modes.
 
-![Tic Tac Toe Game](https://github.com/ravi1892/TTT/raw/main/screenshot.png)
+![Tic Tac Toe Game](Screenshot.png)
 
 ## 🎮 Play Now
 
