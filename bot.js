@@ -61,7 +61,11 @@ function handleCellClick(clickedCellEvent) {
     clickedCell.getAttribute("data-cell-index")
   );
 
-  if (gameState[clickedCellIndex] !== "" || !gameActive) {
+  if (
+    gameState[clickedCellIndex] !== "" ||
+    !gameActive ||
+    currentPlayer !== "X"
+  ) {
     return;
   }
 
@@ -83,6 +87,7 @@ function handleCellClick(clickedCellEvent) {
 
   // If game is not won and still active, let the bot make a move
   if (!gameWon && gameActive) {
+    currentPlayer = "O"; // Switch to bot's turn
     setTimeout(() => {
       makeBotMove();
     }, 300); // Small delay to make it feel more natural
@@ -117,6 +122,7 @@ function makeBotMove() {
     const cell = document.querySelector(`[data-cell-index="${move}"]`);
     handleCellPlayed(cell, move);
     handleResultValidation();
+    currentPlayer = "X"; // Switch back to player's turn
   }
 }
 
