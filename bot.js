@@ -87,18 +87,10 @@ function handleCellClick(clickedCellEvent) {
 
   // If game is not won and still active, let the bot make a move
   if (!gameWon && gameActive) {
-    // Disable player moves while bot is thinking
-    gameActive = false;
-    statusDisplay.textContent = "Bot is thinking...";
-
-    // Add delay before bot's move
+    currentPlayer = "O"; // Switch to bot's turn
     setTimeout(() => {
-      currentPlayer = "O"; // Switch to bot's turn
       makeBotMove();
-      currentPlayer = "X"; // Switch back to player's turn
-      gameActive = true;
-      statusDisplay.textContent = currentPlayerTurn();
-    }, 800); // Increased delay to 800ms for better UX
+    }, 300); // Small delay to make it feel more natural
   }
 }
 
@@ -128,15 +120,9 @@ function makeBotMove() {
 
   if (move !== -1) {
     const cell = document.querySelector(`[data-cell-index="${move}"]`);
-
-    // Add animation for bot's move
-    cell.style.transform = "scale(0.95)";
-    setTimeout(() => {
-      cell.style.transform = "";
-    }, 80);
-
     handleCellPlayed(cell, move);
     handleResultValidation();
+    currentPlayer = "X"; // Switch back to player's turn
   }
 }
 
