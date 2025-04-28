@@ -307,3 +307,109 @@ function handleRestartGame() {
     restartButton.style.transform = "";
   }, 80);
 }
+
+function findBestMove() {
+  // First, check if bot can win immediately
+  for (let i = 0; i < winningConditions.length; i++) {
+    const [a, b, c] = winningConditions[i];
+    if (gameState[a] === "O" && gameState[b] === "O" && gameState[c] === "")
+      return c;
+    if (gameState[a] === "O" && gameState[c] === "O" && gameState[b] === "")
+      return b;
+    if (gameState[b] === "O" && gameState[c] === "O" && gameState[a] === "")
+      return a;
+  }
+
+  // Aggressively block player's winning moves
+  for (let i = 0; i < winningConditions.length; i++) {
+    const [a, b, c] = winningConditions[i];
+    if (gameState[a] === "X" && gameState[b] === "X" && gameState[c] === "")
+      return c;
+    if (gameState[a] === "X" && gameState[c] === "X" && gameState[b] === "")
+      return b;
+    if (gameState[b] === "X" && gameState[c] === "X" && gameState[a] === "")
+      return a;
+  }
+
+  // Create multiple winning opportunities (forks)
+  const forkMoves = findForkMoves("O");
+  if (forkMoves.length > 0) {
+    return forkMoves[Math.floor(Math.random() * forkMoves.length)];
+  }
+
+  // Block opponent's fork opportunities
+  const opponentForkMoves = findForkMoves("X");
+  if (opponentForkMoves.length > 0) {
+    return opponentForkMoves[
+      Math.floor(Math.random() * opponentForkMoves.length)
+    ];
+  }
+
+  // Take center if available (more aggressive play)
+  if (gameState[4] === "") return 4;
+
+  // Take corners aggressively
+  const corners = [0, 2, 6, 8];
+  const availableCorners = corners.filter((corner) => gameState[corner] === "");
+  if (availableCorners.length > 0) {
+    // Prioritize corners that create more winning opportunities
+    const bestCorner = availableCorners.find((corner) => {
+      const tempBoard = [...gameState];
+      tempBoard[corner] = "O";
+      return countWinningOpportunities(tempBoard, "O") > 1;
+    });
+    return (
+      bestCorner ||
+      availableCorners[Math.floor(Math.random() * availableCorners.length)]
+    );
+  }
+
+  // Take any available space that creates a winning opportunity
+  const availableMoves = gameState
+    .map((cell, index) => (cell === "" ? index : -1))
+    .filter((index) => index !== -1);
+  for (const move of availableMoves) {
+    const tempBoard = [...gameState];
+    tempBoard[move] = "O";
+    if (countWinningOpportunities(tempBoard, "O") > 0) {
+      return move;
+    }
+  }
+
+  // If no strategic moves available, take any available space
+  return availableMoves.length > 0
+    ? availableMoves[Math.floor(Math.random() * availableMoves.length)]
+    : -1;
+}
+
+function countWinningOpportunities(board, player) {
+  let count = 0;
+  for (const combo of winningConditions) {
+    const [a, b, c] = combo;
+    if (
+      (board[a] === player && board[b] === player && board[c] === "") ||
+      (board[a] === player && board[c] === player && board[b] === "") ||
+      (board[b] === player && board[c] === player && board[a] === "")
+    ) {
+      count++;
+    }
+  }
+  return count;
+}
+
+function findForkMoves(player) {
+  const forkMoves = [];
+  const availableMoves = gameState
+    .map((cell, index) => (cell === "" ? index : -1))
+    .filter((index) => index !== -1);
+
+  for (const move of availableMoves) {
+    const tempBoard = [...gameState];
+    tempBoard[move] = player;
+    if (countWinningOpportunities(tempBoard, player) >= 2) {
+      forkMoves.push(move);
+    }
+  }
+
+  return forkMoves;
+}
