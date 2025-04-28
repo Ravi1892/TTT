@@ -103,32 +103,26 @@ function handleCellPlayed(clickedCell, clickedCellIndex) {
 
 // Bot move logic
 function makeBotMove() {
-  if (!gameActive || currentPlayer !== "O") return;
+  if (!gameActive) return;
 
-  const move = findBestMove();
+  let move;
+  switch (currentDifficulty) {
+    case "easy":
+      move = getEasyMove();
+      break;
+    case "medium":
+      move = getMediumMove();
+      break;
+    case "hard":
+      move = getHardMove();
+      break;
+  }
+
   if (move !== -1) {
-    // Play click sound
-    clickSound.currentTime = 0;
-    clickSound.play().catch((e) => console.log("Audio play error:", e));
-
-    // Add animation
     const cell = document.querySelector(`[data-cell-index="${move}"]`);
-    cell.style.transform = "scale(0.95)";
-    setTimeout(() => {
-      cell.style.transform = "";
-    }, 80);
-
-    // Handle the cell being played
     handleCellPlayed(cell, move);
-
-    // Check for a win
-    let gameWon = handleResultValidation();
-
-    // If game is not won and still active, switch back to player's turn
-    if (!gameWon && gameActive) {
-      currentPlayer = "X";
-      statusDisplay.textContent = currentPlayerTurn();
-    }
+    handleResultValidation();
+    currentPlayer = "X"; // Switch back to player's turn
   }
 }
 
