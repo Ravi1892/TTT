@@ -61,7 +61,11 @@ function handleCellClick(clickedCellEvent) {
     clickedCell.getAttribute("data-cell-index")
   );
 
-  if (gameState[clickedCellIndex] !== "" || !gameActive) {
+  if (
+    gameState[clickedCellIndex] !== "" ||
+    !gameActive ||
+    currentPlayer !== "X"
+  ) {
     return;
   }
 
@@ -83,11 +87,7 @@ function handleCellClick(clickedCellEvent) {
 
   // If game is not won and still active, let the bot make a move
   if (!gameWon && gameActive) {
-    // Disable player moves while bot is thinking
-    gameActive = false;
-    statusDisplay.textContent = "Bot is thinking...";
-
-    // Add delay before bot's move
+    currentPlayer = "O"; // Switch to bot's turn
     setTimeout(() => {
       makeBotMove();
     }, 300); // Small delay to make it feel more natural
