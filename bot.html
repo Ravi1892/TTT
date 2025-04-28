@@ -151,6 +151,47 @@
           font-size: 0.7rem;
         }
       }
+
+      .restart {
+        background: linear-gradient(to right, #3498db, #2980b9);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        padding: 10px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 20px 0;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .bot-toggle {
+        background: linear-gradient(to right, #2ecc71, #27ae60);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        padding: 10px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .bot-toggle.off {
+        background: linear-gradient(to right, #e74c3c, #c0392b);
+      }
+
+      .bot-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
   <body>
@@ -180,7 +221,7 @@
         </div>
       </div>
 
-      <div class="status">Your turn (X)</div>
+      <div class="status">Player X's turn</div>
       <div class="board">
         <div class="cell" data-cell-index="0"></div>
         <div class="cell" data-cell-index="1"></div>
@@ -192,8 +233,307 @@
         <div class="cell" data-cell-index="7"></div>
         <div class="cell" data-cell-index="8"></div>
       </div>
-      <button class="restart"><i class="fas fa-redo"></i> New Game</button>
+      <div class="controls">
+        <button class="restart"><i class="fas fa-redo"></i> New Game</button>
+        <button class="bot-toggle" id="bot-toggle">
+          <i class="fas fa-robot"></i> Bot: ON
+        </button>
+      </div>
     </div>
-    <script src="bot.js"></script>
+    <script>
+      let currentPlayer = "X";
+      let gameBoard = ["", "", "", "", "", "", "", "", ""];
+      let gameActive = true;
+      let botEnabled = true;
+      let botMode = "normal"; // 'normal' or 'advanced'
+
+      const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8], // Rows
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8], // Columns
+        [0, 4, 8],
+        [2, 4, 6], // Diagonals
+      ];
+
+      const botToggle = document.getElementById("bot-toggle");
+      const statusDisplay = document.getElementById("status");
+
+      function toggleBot() {
+        botEnabled = !botEnabled;
+        botToggle.textContent = `Bot: ${botEnabled ? "ON" : "OFF"}`;
+        botToggle.classList.toggle("off");
+        if (botEnabled && currentPlayer === "O") {
+          makeBotMove();
+        }
+      }
+
+      function makeBotMove() {
+        if (!botEnabled || !gameActive || currentPlayer !== "O") return;
+
+        let move;
+        if (botMode === "advanced") {
+          move = findBestMove();
+        } else {
+          move = findAggressiveMove();
+        }
+
+        if (move !== -1) {
+          setTimeout(() => {
+            handleCellClick(move);
+          }, 500);
+        }
+      }
+
+      function findAggressiveMove() {
+        // First, check if bot can win
+        for (let i = 0; i < winningCombinations.length; i++) {
+          const [a, b, c] = winningCombinations[i];
+          if (
+            gameBoard[a] === "O" &&
+            gameBoard[b] === "O" &&
+            gameBoard[c] === ""
+          )
+            return c;
+          if (
+            gameBoard[a] === "O" &&
+            gameBoard[c] === "O" &&
+            gameBoard[b] === ""
+          )
+            return b;
+          if (
+            gameBoard[b] === "O" &&
+            gameBoard[c] === "O" &&
+            gameBoard[a] === ""
+          )
+            return a;
+        }
+
+        // Then, block player's winning move
+        for (let i = 0; i < winningCombinations.length; i++) {
+          const [a, b, c] = winningCombinations[i];
+          if (
+            gameBoard[a] === "X" &&
+            gameBoard[b] === "X" &&
+            gameBoard[c] === ""
+          )
+            return c;
+          if (
+            gameBoard[a] === "X" &&
+            gameBoard[c] === "X" &&
+            gameBoard[b] === ""
+          )
+            return b;
+          if (
+            gameBoard[b] === "X" &&
+            gameBoard[c] === "X" &&
+            gameBoard[a] === ""
+          )
+            return a;
+        }
+
+        // Take center if available
+        if (gameBoard[4] === "") return 4;
+
+        // Take corners
+        const corners = [0, 2, 6, 8];
+        const availableCorners = corners.filter(
+          (corner) => gameBoard[corner] === ""
+        );
+        if (availableCorners.length > 0) {
+          return availableCorners[
+            Math.floor(Math.random() * availableCorners.length)
+          ];
+        }
+
+        // Take any available space
+        const availableMoves = gameBoard
+          .map((cell, index) => (cell === "" ? index : -1))
+          .filter((index) => index !== -1);
+        return availableMoves.length > 0
+          ? availableMoves[Math.floor(Math.random() * availableMoves.length)]
+          : -1;
+      }
+
+      function findBestMove() {
+        // First, check if bot can win
+        for (let i = 0; i < winningCombinations.length; i++) {
+          const [a, b, c] = winningCombinations[i];
+          if (
+            gameBoard[a] === "O" &&
+            gameBoard[b] === "O" &&
+            gameBoard[c] === ""
+          )
+            return c;
+          if (
+            gameBoard[a] === "O" &&
+            gameBoard[c] === "O" &&
+            gameBoard[b] === ""
+          )
+            return b;
+          if (
+            gameBoard[b] === "O" &&
+            gameBoard[c] === "O" &&
+            gameBoard[a] === ""
+          )
+            return a;
+        }
+
+        // Then, block player's winning move
+        for (let i = 0; i < winningCombinations.length; i++) {
+          const [a, b, c] = winningCombinations[i];
+          if (
+            gameBoard[a] === "X" &&
+            gameBoard[b] === "X" &&
+            gameBoard[c] === ""
+          )
+            return c;
+          if (
+            gameBoard[a] === "X" &&
+            gameBoard[c] === "X" &&
+            gameBoard[b] === ""
+          )
+            return b;
+          if (
+            gameBoard[b] === "X" &&
+            gameBoard[c] === "X" &&
+            gameBoard[a] === ""
+          )
+            return a;
+        }
+
+        // Create a fork opportunity
+        const forkMoves = findForkMoves("O");
+        if (forkMoves.length > 0) {
+          return forkMoves[Math.floor(Math.random() * forkMoves.length)];
+        }
+
+        // Block opponent's fork
+        const opponentForkMoves = findForkMoves("X");
+        if (opponentForkMoves.length > 0) {
+          return opponentForkMoves[
+            Math.floor(Math.random() * opponentForkMoves.length)
+          ];
+        }
+
+        // Take center if available
+        if (gameBoard[4] === "") return 4;
+
+        // Take corners
+        const corners = [0, 2, 6, 8];
+        const availableCorners = corners.filter(
+          (corner) => gameBoard[corner] === ""
+        );
+        if (availableCorners.length > 0) {
+          return availableCorners[
+            Math.floor(Math.random() * availableCorners.length)
+          ];
+        }
+
+        // Take any available space
+        const availableMoves = gameBoard
+          .map((cell, index) => (cell === "" ? index : -1))
+          .filter((index) => index !== -1);
+        return availableMoves.length > 0
+          ? availableMoves[Math.floor(Math.random() * availableMoves.length)]
+          : -1;
+      }
+
+      function findForkMoves(player) {
+        const forkMoves = [];
+        for (let i = 0; i < 9; i++) {
+          if (gameBoard[i] === "") {
+            const tempBoard = [...gameBoard];
+            tempBoard[i] = player;
+            let winningLines = 0;
+            for (const combo of winningCombinations) {
+              if (combo.includes(i)) {
+                const [a, b, c] = combo;
+                if (
+                  (tempBoard[a] === player &&
+                    tempBoard[b] === player &&
+                    tempBoard[c] === "") ||
+                  (tempBoard[a] === player &&
+                    tempBoard[c] === player &&
+                    tempBoard[b] === "") ||
+                  (tempBoard[b] === player &&
+                    tempBoard[c] === player &&
+                    tempBoard[a] === "")
+                ) {
+                  winningLines++;
+                }
+              }
+            }
+            if (winningLines >= 2) {
+              forkMoves.push(i);
+            }
+          }
+        }
+        return forkMoves;
+      }
+
+      function handleCellClick(index) {
+        if (gameBoard[index] !== "" || !gameActive) return;
+
+        gameBoard[index] = currentPlayer;
+        document.querySelector(`[data-cell-index="${index}"]`).textContent =
+          currentPlayer;
+
+        if (checkWin()) {
+          statusDisplay.textContent = `Player ${currentPlayer} wins!`;
+          gameActive = false;
+          return;
+        }
+
+        if (checkDraw()) {
+          statusDisplay.textContent = "It's a draw!";
+          gameActive = false;
+          return;
+        }
+
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        statusDisplay.textContent = `Player ${currentPlayer}'s turn`;
+
+        if (currentPlayer === "O" && botEnabled) {
+          makeBotMove();
+        }
+      }
+
+      function checkWin() {
+        return winningCombinations.some((combination) => {
+          return combination.every((index) => {
+            return gameBoard[index] === currentPlayer;
+          });
+        });
+      }
+
+      function checkDraw() {
+        return gameBoard.every((cell) => cell !== "");
+      }
+
+      function restartGame() {
+        currentPlayer = "X";
+        gameBoard = ["", "", "", "", "", "", "", "", ""];
+        gameActive = true;
+        statusDisplay.textContent = "Player X's turn";
+        document.querySelectorAll(".cell").forEach((cell) => {
+          cell.textContent = "";
+        });
+        if (botEnabled && currentPlayer === "O") {
+          makeBotMove();
+        }
+      }
+
+      document.querySelectorAll(".cell").forEach((cell) => {
+        cell.addEventListener("click", () =>
+          handleCellClick(parseInt(cell.dataset.cellIndex))
+        );
+      });
+
+      document.querySelector(".restart").addEventListener("click", restartGame);
+      botToggle.addEventListener("click", toggleBot);
+    </script>
   </body>
 </html>
