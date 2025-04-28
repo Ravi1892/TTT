@@ -215,6 +215,16 @@
       const botToggle = document.getElementById("bot-toggle");
       const statusDisplay = document.getElementById("status");
 
+      // Add sound effects
+      const clickSound = new Audio("click.mp3");
+      const winSound = new Audio("win.mp3");
+      const drawSound = new Audio("draw.mp3");
+
+      // Preload sounds
+      clickSound.load();
+      winSound.load();
+      drawSound.load();
+
       function toggleBot() {
         botEnabled = !botEnabled;
         botToggle.textContent = `Bot: ${botEnabled ? "ON" : "OFF"}`;
@@ -438,12 +448,14 @@
         if (checkWin()) {
           statusDisplay.textContent = `Player ${currentPlayer} wins!`;
           gameActive = false;
+          winSound.play();
           return;
         }
 
         if (checkDraw()) {
           statusDisplay.textContent = "It's a draw!";
           gameActive = false;
+          drawSound.play();
           return;
         }
 
